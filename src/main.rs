@@ -1,6 +1,6 @@
 use dioxus::{
     prelude::*,
-    router::{use_route, Link, Route, Router},
+    router::{use_route, Link, Redirect, Route, Router},
 };
 
 fn main() {
@@ -35,6 +35,13 @@ fn navbar(cx: Scope) -> Element {
 fn homepage(cx: Scope) -> Element {
     cx.render(rsx! {
         p { "Welcome to Dioxus Blog!" }
+    })
+}
+
+fn secret_page(cx: Scope) -> Element {
+    cx.render(rsx! {
+        p { "This page is not to be viewed!" }
+        Redirect { to: "/" }
     })
 }
 
