@@ -1,6 +1,6 @@
 use dioxus::{
     prelude::*,
-    router::{Route, Router},
+    router::{use_route, Link, Route, Router},
 };
 
 fn main() {
@@ -10,9 +10,24 @@ fn main() {
 fn app(cx: Scope) -> Element {
     cx.render(rsx! {
         Router {
-            p { "-- Dioxus Blog --" }
+            self::navbar {}
             Route { to: "/", self::homepage {}}
+            Route {
+                to: "/blog",
+                p { "-- Dioxus Blog --" }
+                Route { to: "/:post", self::blog_post {} }
+            }
             Route { to: "", self::page_not_found {}}
+        }
+    })
+}
+
+fn navbar(cx: Scope) -> Element {
+    cx.render(rsx! {
+        ul {
+            Link { to: "/", "Home"}
+            br {}
+            Link { to: "/blog", "Blog"}
         }
     })
 }
@@ -21,6 +36,26 @@ fn homepage(cx: Scope) -> Element {
     cx.render(rsx! {
         p { "Welcome to Dioxus Blog!" }
     })
+}
+
+fn blog_post(cx: Scope) -> Element {
+    let route = use_route(&cx);
+    let blog_text = match route.segment::<String>("post").unwrap() {
+        Ok(val) => get_blog_post(&val),
+        Err(_) => "An unknown error occured".to_string(),
+    };
+
+    cx.render(rsx! {
+        p { "{blog_text}" }
+    })
+}
+
+fn get_blog_post(id: &str) -> String {
+    match id {
+        "foo" => "Welcome to the foo blog post!".to_string(),
+        "bar" => "This is the bar blog post!".to_string(),
+        id => format!("Blog post '{id}' does not exist!"),
+    }
 }
 
 fn page_not_found(cx: Scope) -> Element {
