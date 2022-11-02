@@ -4,4 +4,4 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-dioxus = { git = "https://github.com/DioxusLabs/dioxus", branch = "jk/local-router", features = ["web", "router"] }
+dioxus = { version = "0.2", features = ["web", "router"] }

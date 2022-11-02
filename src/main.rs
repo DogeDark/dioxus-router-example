@@ -47,9 +47,9 @@ fn secret_page(cx: Scope) -> Element {
 
 fn blog_post(cx: Scope) -> Element {
     let route = use_route(&cx);
-    let blog_text = match route.segment::<String>("post").unwrap() {
-        Ok(val) => get_blog_post(&val),
-        Err(_) => "An unknown error occured".to_string(),
+    let blog_text = match route.segment("post") {
+        Some(val) => get_blog_post(val),
+        None => "An unknown error occured".to_string(),
     };
 
     cx.render(rsx! {
